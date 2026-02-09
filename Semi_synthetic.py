@@ -133,7 +133,7 @@ def train_ips_reference_model(train_data, propensity_matrix, device, n_user, n_i
             
             f_model.train()
             pred = f_model(users_all, items_all)
-            inv_prop = 1.0 / sub_prop
+            inv_prop = 1/2 * (1.0 / sub_prop) + 1/2
             e_loss = mse_none(pred, sub_r)
             loss = torch.sum(e_loss * inv_prop * sub_observed) / (torch.sum(sub_observed) + 1e-9)
             
@@ -253,7 +253,7 @@ def train_and_eval(train_data, val_data, test_data, ground_truth_matrix, propens
             
             with torch.no_grad():
                 pred_fixed = base_model(users_all, items_all)
-                inv_prop_fixed = 1.0 / sub_prop
+                inv_prop_fixed = 1/2 * (1.0 / sub_prop) + 1/2
                 e_loss = mse_none(pred_fixed, sub_r)
             
             imp_out = imputation_model(users_all, items_all)
@@ -268,7 +268,7 @@ def train_and_eval(train_data, val_data, test_data, ground_truth_matrix, propens
             base_model.train()
             imputation_model.eval()
             
-            inv_prop = 1.0 / sub_prop
+            inv_prop = 1/2 * (1.0 / sub_prop) + 1/2
             pred_all = base_model(users_all, items_all)
             
             with torch.no_grad():
@@ -608,11 +608,11 @@ if __name__ == "__main__":
             use_conformal=False
         )
         baseline_mse_list.append(baseline_results['MSE'])
-        baseline_mae_quantiles_list.append(baseline_results['MAE_Quantiles_Original'])
+        baseline_mae_quantiles_list.append(baseline_results['MAPE_Quantiles_Original'])
     
     baseline_mse = float(np.mean(baseline_mse_list))
     baseline_rmse = float(np.sqrt(baseline_mse))
-    baseline_mae_quantiles = {
+    baseline_mape_quantiles = {
         '10%': float(np.mean([q['10%'] for q in baseline_mae_quantiles_list])),
         '30%': float(np.mean([q['30%'] for q in baseline_mae_quantiles_list])),
         '50%': float(np.mean([q['50%'] for q in baseline_mae_quantiles_list])),
@@ -639,11 +639,11 @@ if __name__ == "__main__":
             conformal_strategy=args.strategy
         )
         mse_list.append(test_results_conf['MSE'])
-        mae_quantiles_list.append(test_results_conf['MAE_Quantiles_Corrected'])
+        mae_quantiles_list.append(test_results_conf['MAPE_Quantiles_Corrected'])
     
     conformal_mse = float(np.mean(mse_list))
     conformal_rmse = float(np.sqrt(conformal_mse))
-    conformal_mae_quantiles = {
+    conformal_mape_quantiles = {
         '10%': float(np.mean([q['10%'] for q in mae_quantiles_list])),
         '30%': float(np.mean([q['30%'] for q in mae_quantiles_list])),
         '50%': float(np.mean([q['50%'] for q in mae_quantiles_list])),
@@ -654,9 +654,9 @@ if __name__ == "__main__":
     print('\n' + '='*60)
     print('DR-JL Baseline:')
     print(f'  RMSE: {baseline_rmse:.6f}')
-    print(f'  MAIE Quantiles: 10%={baseline_mae_quantiles["10%"]:.6f}, 30%={baseline_mae_quantiles["30%"]:.6f}, 50%={baseline_mae_quantiles["50%"]:.6f}, 70%={baseline_mae_quantiles["70%"]:.6f}, 90%={baseline_mae_quantiles["90%"]:.6f}')
+    print(f'  MAPE Quantiles: 10%={baseline_mape_quantiles["10%"]:.2f}%, 30%={baseline_mape_quantiles["30%"]:.2f}%, 50%={baseline_mape_quantiles["50%"]:.2f}%, 70%={baseline_mape_quantiles["70%"]:.2f}%, 90%={baseline_mape_quantiles["90%"]:.2f}%')
     print()
     print(f'DR-JL + Conformal (alpha={alpha}):')
     print(f'  RMSE: {conformal_rmse:.6f}')
-    print(f'  MAIE Quantiles: 10%={conformal_mae_quantiles["10%"]:.6f}, 30%={conformal_mae_quantiles["30%"]:.6f}, 50%={conformal_mae_quantiles["50%"]:.6f}, 70%={conformal_mae_quantiles["70%"]:.6f}, 90%={conformal_mae_quantiles["90%"]:.6f}')
+    print(f'  MAPE Quantiles: 10%={conformal_mape_quantiles["10%"]:.2f}%, 30%={conformal_mape_quantiles["30%"]:.2f}%, 50%={conformal_mape_quantiles["50%"]:.2f}%, 70%={conformal_mape_quantiles["70%"]:.2f}%, 90%={conformal_mape_quantiles["90%"]:.2f}%')
     print('='*60)
