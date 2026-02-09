@@ -2,7 +2,7 @@
 
 ## Files
 
-- datasets/: real-world datasets (Coat, Yahoo! R3, KuaiRec) and processed files
+- datasets/: real-world datasets (Coat, Yahoo! R3, KuaiRec), semi-synthetic dataset (ml-100k), and processed files
 - utils/: dataloader, dataset loader, metrics, early stopping
 - arguments.py: common CLI arguments for real-world scripts
 - model.py: MF base models
@@ -17,13 +17,9 @@
 Semi_synthetic.py expects a predicted matrix file (default: data/predicted_matrix).
 
 ```bash
-python Semi_synthetic.py --matrix_file data/predicted_matrix --seed 2023
+python completion.py
+python Semi_synthetic.py
 ```
-
-Optional arguments:
-- --propensity_type {mnar, ground-truth}
-- --p_base <float>
-- --strategy {correction, boundary, filter}
 
 ### (2) Real-world (WCP-DRJL)
 
