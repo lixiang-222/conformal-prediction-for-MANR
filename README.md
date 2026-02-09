@@ -21,7 +21,7 @@ python completion.py
 python Semi_synthetic.py
 ```
 
-### (2) Real-world (WCP-DRJL)
+### (2) Real-world
 
 ```bash
 python WCP_DR_JL.py --dataset coat --conformal_policy clip 
