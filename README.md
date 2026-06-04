@@ -1,4 +1,4 @@
-# Conformal Imputation Correction in Doubly Robust Learning for Debiased Recommendation
+# Causality-Based Conformal Imputation Correction with Non-Random Missing Labels
 
 ## Files
 
@@ -30,5 +30,15 @@ Common arguments:
 - --dataset {coat, yahooR3, kuaiRec}
 - --conformal_policy {hard_reject, clip, fpred}
 ```
+
 ## Acknowledgements
-This work is currently under reviewing. We will release a full version in future updates.
+We welcome discussion and constructive criticism from readers in the community. If you find our work helpful, please consider citing it:
+
+```bash
+@inproceedings{zheng2026causality,
+  title={Causality-Based Conformal Imputation Correction with Non-Random Missing Labels},
+  author={Zheng, Chunyuan and Li, Xiang and Li, Haoxuan and Wang, Hao and Pan, Hang and Zhang, Yang and Ng, See-Kiong and Zhou, Xiao-Hua},
+  booktitle={ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
+  year={2026}
+}
+```
